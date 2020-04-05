@@ -449,48 +449,78 @@ class RunStart {
         File f0=new File(tempPath);
         f0.mkdirs(); //如果文件夹不存在 则建立新文件夹
         if (f.exists()){
-            String[] file=f.list();
-            File temp;
-            if (file!=null){
-                for (String s : file) {
-                    if (fPath.endsWith(File.separator)) {
-                        temp = new File(fPath + s);
-                    } else {
-                        temp = new File(fPath + File.separator + s);
-                    }
-                    if (temp.isFile()) {
-                        String oldPath = temp.getPath();
-                        FileInputStream input = new FileInputStream(temp);
-                        File tempFile = new File(tempPath + File.separator + temp.getName());
-                        FileOutputStream output = new FileOutputStream(tempPath + File.separator + temp.getName());
-                        byte[] b1 = new byte[1024];
-                        byte[] b2 = new byte[1024];
-                        int len;
-                        while ((len = input.read(b1)) != -1) {
-                            for(int i=0;i<len;i++)
-                            {
-                                byte b=b1[i];
-                                if (i%3 == 0){
-                                    b2[i] = (byte) (b - (byte) (key>>14));
-                                }else if (i%3 == 1){
-                                    b2[i] = (byte) (b - (byte) (key>>7));
-                                }else {
-                                    b2[i] = (byte) (b - (byte) (key));
-                                }
-                            }
-                            output.write(b2, 0, len);
+            if (f.isFile()){
+                String oldPath = f.getPath();
+                FileInputStream input = new FileInputStream(f);
+                File tempFile = new File(tempPath + File.separator + f.getName());
+                FileOutputStream output = new FileOutputStream(tempPath + File.separator + f.getName());
+                byte[] b1 = new byte[1024];
+                byte[] b2 = new byte[1024];
+                int len;
+                while ((len = input.read(b1)) != -1) {
+                    for(int i=0;i<len;i++)
+                    {
+                        byte b=b1[i];
+                        if (i%3 == 0){
+                            b2[i] = (byte) (b - (byte) (key>>14));
+                        }else if (i%3 == 1){
+                            b2[i] = (byte) (b - (byte) (key>>7));
+                        }else {
+                            b2[i] = (byte) (b - (byte) (key));
                         }
-                        output.flush();
-                        output.close();
-                        input.close();
-                        temp.delete();
-                        tempFile.renameTo(new File(oldPath));
-                        System.out.println("解密" + oldPath);
-                    } else if (temp.isDirectory()) {//如果是子文件夹
-                        resaleFile(fPath + File.separator + s, key);
                     }
+                    output.write(b2, 0, len);
                 }
-                System.out.println("解密" + f.getPath());
+                output.flush();
+                output.close();
+                input.close();
+                f.delete();
+                tempFile.renameTo(new File(oldPath));
+                System.out.println("加密" + oldPath);
+            } else {
+                String[] file=f.list();
+                File temp;
+                if (file!=null){
+                    for (String s : file) {
+                        if (fPath.endsWith(File.separator)) {
+                            temp = new File(fPath + s);
+                        } else {
+                            temp = new File(fPath + File.separator + s);
+                        }
+                        if (temp.isFile()) {
+                            String oldPath = temp.getPath();
+                            FileInputStream input = new FileInputStream(temp);
+                            File tempFile = new File(tempPath + File.separator + temp.getName());
+                            FileOutputStream output = new FileOutputStream(tempPath + File.separator + temp.getName());
+                            byte[] b1 = new byte[1024];
+                            byte[] b2 = new byte[1024];
+                            int len;
+                            while ((len = input.read(b1)) != -1) {
+                                for(int i=0;i<len;i++)
+                                {
+                                    byte b=b1[i];
+                                    if (i%3 == 0){
+                                        b2[i] = (byte) (b - (byte) (key>>14));
+                                    }else if (i%3 == 1){
+                                        b2[i] = (byte) (b - (byte) (key>>7));
+                                    }else {
+                                        b2[i] = (byte) (b - (byte) (key));
+                                    }
+                                }
+                                output.write(b2, 0, len);
+                            }
+                            output.flush();
+                            output.close();
+                            input.close();
+                            temp.delete();
+                            tempFile.renameTo(new File(oldPath));
+                            System.out.println("解密" + oldPath);
+                        } else if (temp.isDirectory()) {//如果是子文件夹
+                            resaleFile(fPath + File.separator + s, key);
+                        }
+                    }
+                    System.out.println("解密" + f.getPath());
+                }
             }
         }else {
             System.out.println("没有找到" + fPath);
