@@ -9,6 +9,7 @@ public class Run {
     public static void main(String[] args) throws Exception {
         RunStart run = new RunStart();
         run.runStart();
+        System.out.println("----感谢使用命令行文件管理系统----");
     }
 
 }
