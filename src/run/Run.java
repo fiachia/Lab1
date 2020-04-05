@@ -194,7 +194,8 @@ class RunStart {
         if (pan0.matcher(path).matches() & pan0.matcher(Filename).matches()){
             File f1 = new File(Filename);
             if (f1.exists()){
-                path = f1.getCanonicalPath();
+                //path = f1.getCanonicalPath();
+                path = Filename;
             } else {
                 System.out.println("没有找到盘符");
             }
