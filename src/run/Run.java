@@ -476,7 +476,7 @@ class RunStart {
                 input.close();
                 f.delete();
                 tempFile.renameTo(new File(oldPath));
-                System.out.println("加密" + oldPath);
+                System.out.println("解密" + oldPath);
             } else {
                 String[] file=f.list();
                 File temp;
