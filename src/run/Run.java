@@ -1,10 +1,8 @@
 package run;
 import java.io.*;
-import java.security.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.crypto.*;
 public class Run {
     public static void main(String[] args) throws Exception {
         RunStart run = new RunStart();
