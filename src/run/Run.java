@@ -190,8 +190,6 @@ class RunStart {
         File f1 = new File(Filename);
         if (f1.exists()){
             if (f1.isDirectory()){
-                //path = path + File.separator + Filename;
-                //path = f1.getAbsolutePath();
                 path = f1.getCanonicalPath();
             }else {
                 System.out.println(Filename + "不是一个目录");
