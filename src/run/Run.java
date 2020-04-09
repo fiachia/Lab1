@@ -77,9 +77,9 @@ class RunStart {
     void createFile() {//创建文件夹
         Scanner s = new Scanner(System.in);
         System.out.print("请输入文件名：");
-        String Filename = s.next();
-        File file = new File(path + File.separator + Filename);
-        System.out.println(path + File.separator + Filename);
+        String Filename = getPath(s.next());
+        File file = new File(Filename);
+        System.out.println(Filename);
         if (!file.exists()) {
             file.mkdirs();
             System.out.println("文件夹创建成功");
@@ -90,8 +90,8 @@ class RunStart {
     void removeFile(){
         Scanner s = new Scanner(System.in);
         System.out.print("请输入文件名：");
-        String Filename = s.next();
-        removeFile(path + File.separator + Filename);
+        String Filename = getPath(s.next());
+        removeFile(Filename);
     }
     void removeFile(String fPath){
         File f = new File(fPath);
@@ -130,13 +130,12 @@ class RunStart {
                         }
                         String span = " ";
                         String str =  span.repeat(20-longNum);
-                        File f = new File(path + File.separator + value);
+                        File f = new File(getPath(value));
                         if (f.isDirectory()) {
                             System.out.print("\033[32m" + value + "\033[0m" + str);
                         } else {
                             System.out.print(value + str);
                         }
-
                     } else if (longNum < 40){
                         i+=2;
                         if (i > 5) {
@@ -145,7 +144,7 @@ class RunStart {
                         }
                         String span = " ";
                         String str =  span.repeat(40-longNum);
-                        File f = new File(path + File.separator + value);
+                        File f = new File(getPath(value));
                         if (f.isDirectory()) {
                             System.out.print("\033[32m" + value + "\033[0m" + str);
                         } else {
@@ -160,7 +159,7 @@ class RunStart {
                         }
                         String span = " ";
                         String str =  span.repeat(60-longNum);
-                        File f = new File(path + File.separator + value);
+                        File f = new File(getPath(value));
                         if (f.isDirectory()) {
                             System.out.print("\033[32m" + value + "\033[0m" + str);
                         } else {
@@ -168,7 +167,7 @@ class RunStart {
                         }
 
                     }else {
-                        File f = new File(path + File.separator + value);
+                        File f = new File(getPath(value));
                         if (f.isDirectory()) {
                             longName.append("\033[32m").append(value).append("\033[0m").append("\n");
                         } else {
@@ -190,7 +189,8 @@ class RunStart {
     void intoFile() throws IOException{
         Scanner s = new Scanner(System.in);
         System.out.print("请输入文件名：");
-        String Filename = s.next();
+        String Filename = getPath(s.next());
+        /*
         if (pan0.matcher(path).matches() & pan0.matcher(Filename).matches()){
             File f1 = new File(Filename);
             if (f1.exists()){
@@ -199,39 +199,37 @@ class RunStart {
             } else {
                 System.out.println("没有找到盘符");
             }
-        }else{
-            File f1 = new File(path + File.separator + Filename);
-            if (f1.exists()){
-                if (f1.isDirectory()){
-                    //path = path + File.separator + Filename;
-                    //path = f1.getAbsolutePath();
-                    path = f1.getCanonicalPath();
-                }else {
-                    System.out.println(path + File.separator + Filename + "不是一个目录");
-                }
+        }*/
+        File f1 = new File(Filename);
+        if (f1.exists()){
+            if (f1.isDirectory()){
+                //path = path + File.separator + Filename;
+                //path = f1.getAbsolutePath();
+                path = f1.getCanonicalPath();
             }else {
-                System.out.println("没有找到" + path + File.separator + Filename);
+                System.out.println(Filename + "不是一个目录");
             }
+        }else {
+            System.out.println("没有找到" + Filename);
         }
-
     }
     void copyFile() throws IOException {
         Scanner s = new Scanner(System.in);
         System.out.print("请输入原文件名：");
-        String oldPath = s.next();
+        String oldPath = getPath(s.next());
         System.out.print("请输入新文件名：");
-        String newPath = s.next();
-        File f = new File(path + File.separator + newPath);
+        String newPath = getPath(s.next());
+        File f = new File(newPath);
         if (f.exists()){
             System.out.println("已有文件名，是否覆盖？");
             String a = s.next();
             if (a.equals("y") | a.equals("Y")){
-                copyFile(path + File.separator + oldPath,path + File.separator + newPath);
+                copyFile(oldPath,newPath);
             }else {
                 System.out.println("已结束复制操作");
             }
         }else {
-            copyFile(path + File.separator + oldPath,path + File.separator + newPath);
+            copyFile(oldPath,newPath);
         }
     }
     void copyFile(String oldPath, String newPath) throws IOException {
@@ -259,20 +257,20 @@ class RunStart {
     void copyAllFile() throws IOException {
         Scanner s = new Scanner(System.in);
         System.out.print("请输入原文件名：");
-        String oldPath = s.next();
+        String oldPath = getPath(s.next());
         System.out.print("请输入新文件名：");
-        String newPath = s.next();
-        File f = new File(path + File.separator + newPath);
+        String newPath = getPath(s.next());
+        File f = new File(newPath);
         if (f.exists()){
             System.out.println("已有文件名，是否覆盖？");
             String a = s.next();
             if (a.equals("y") | a.equals("Y")){
-                copyAllFile(path + File.separator + oldPath,path + File.separator + newPath);
+                copyAllFile(oldPath,newPath);
             }else {
                 System.out.println("已结束复制操作");
             }
         }else {
-            copyAllFile(path + File.separator + oldPath,path + File.separator + newPath);
+            copyAllFile(oldPath,newPath);
         }
     }
     void copyAllFile(String oldPath,String newPath) throws IOException {
@@ -336,13 +334,14 @@ class RunStart {
         int key = getInt();
         File file = new File(path + File.separator + fPath);
         if(file.exists()){
-            saleFile(file.getPath(),key);
+            String temp = saleFile(file.getPath(),key);
+            new File(path + File.separator + temp).delete();
         } else {
             System.out.println("没有找到加密文件");
         }
-        new File(path + File.separator + "temp").delete();
+
     }
-    void saleFile(String fPath,int key) throws IOException {
+    String saleFile(String fPath,int key) throws IOException {
         File f=new File(fPath);
         String tempPath = path + File.separator + "temp";
         File f0=new File(tempPath);
@@ -425,6 +424,7 @@ class RunStart {
         }else {
             System.out.println("没有找到" + fPath);
         }
+        return "temp";
     }
     void resaleFile() throws IOException {
         Scanner s = new Scanner(System.in);
@@ -437,13 +437,13 @@ class RunStart {
         int key = getInt();
         File file = new File(path + File.separator + fPath);
         if(file.exists()){
-            resaleFile(file.getPath(),key);
+            String temp = resaleFile(file.getPath(),key);
+            new File(path + File.separator + temp).delete();
         } else {
             System.out.println("没有找到解密文件");
         }
-        new File(path + File.separator + "temp").delete();
     }
-    void resaleFile(String fPath,int key) throws IOException {
+    String resaleFile(String fPath,int key) throws IOException {
         File f=new File(fPath);
         String tempPath = path + File.separator + "temp";
         File f0=new File(tempPath);
@@ -525,6 +525,7 @@ class RunStart {
         }else {
             System.out.println("没有找到" + fPath);
         }
+        return "temp";
     }
     int getInt(){
         Scanner s = new Scanner(System.in);
@@ -542,6 +543,12 @@ class RunStart {
             System.out.print("请输入密码（六位数字）：");
             return getInt();
         }
+    }
+    String getPath(String filePath){
+        if (!pan0.matcher(filePath).lookingAt()){
+            filePath = path + File.separator + filePath;
+        }
+        return filePath;
     }
 }
 
