@@ -9,7 +9,6 @@ public class Run {
         run.runStart();
         System.out.println("----感谢使用命令行文件管理系统----");
     }
-
 }
 class RunStart {
     private String path = "C:" + File.separator + "Users" + File.separator + System.getenv().get("USERNAME");
