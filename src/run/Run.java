@@ -187,16 +187,6 @@ class RunStart {
         Scanner s = new Scanner(System.in);
         System.out.print("请输入文件名：");
         String Filename = getPath(s.next());
-        /*
-        if (pan0.matcher(path).matches() & pan0.matcher(Filename).matches()){
-            File f1 = new File(Filename);
-            if (f1.exists()){
-                //path = f1.getCanonicalPath();
-                path = Filename;
-            } else {
-                System.out.println("没有找到盘符");
-            }
-        }*/
         File f1 = new File(Filename);
         if (f1.exists()){
             if (f1.isDirectory()){
