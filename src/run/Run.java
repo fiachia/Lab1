@@ -72,16 +72,21 @@ class RunStart {
         }while(!a.equals("quit"));
     }
     void createFile() {//创建文件夹
-        Scanner s = new Scanner(System.in);
-        System.out.print("请输入文件名：");
-        String Filename = getPath(s.next());
-        File file = new File(Filename);
-        System.out.println(Filename);
-        if (!file.exists()) {
-            file.mkdirs();
-            System.out.println("文件夹创建成功");
-        } else {
-            System.out.println("该文件夹已存在");
+        try {
+            Scanner s = new Scanner(System.in);
+            System.out.print("请输入文件名：");
+            String Filename = getPath(s.next());
+            File file = new File(Filename);
+            System.out.println(Filename);
+            if (!file.exists()) {
+                file.mkdirs();
+                System.out.println("文件夹创建成功");
+            } else {
+                System.out.println("该文件夹已存在");
+            }
+        } catch (Exception e){
+            System.out.println("创建文件夹（mkdir）指令失败");
+            System.out.println(e);
         }
     }
     void removeFile(){
@@ -91,130 +96,150 @@ class RunStart {
         removeFile(Filename);
     }
     void removeFile(String fPath){
-        File f = new File(fPath);
-        if (f.exists()){
-            File[] files =f.listFiles();
-            if (files != null) {
-                for (File file : files) {
-                    if (file.isDirectory()) {
-                        removeFile(file.getPath());
-                    } else {
-                        file.delete();
-                        System.out.println("删除" + file.getPath());
+        try {
+            File f = new File(fPath);
+            if (f.exists()){
+                File[] files =f.listFiles();
+                if (files != null) {
+                    for (File file : files) {
+                        if (file.isDirectory()) {
+                            removeFile(file.getPath());
+                        } else {
+                            file.delete();
+                            System.out.println("删除" + file.getPath());
+                        }
                     }
                 }
+                f.delete();//删除当前目录
+                System.out.println("删除" + f.getPath());
+            }else {
+                System.out.println("没有找到" + fPath);
             }
-            f.delete();//删除当前目录
-            System.out.println("删除" + f.getPath());
-        }else {
-            System.out.println("没有找到" + fPath);
+        } catch (Exception e) {
+            System.out.println("删除文件/文件夹（rm）指令失败");
+            System.out.println(e);
         }
     }
     void listFile() {
-        File f1 = new File(path);
-        if (f1.isDirectory()) {
-            String[] s = f1.list();
-            if (s!=null){
-                int i = -1;
-                StringBuilder longName = new StringBuilder();
-                for (String value : s) {
-                    int longNum = value.length() + getChineseNumber(value);
-                    if (longNum < 20){
-                        i++;
-                        if (i > 5) {
-                            System.out.print("\n");
-                            i = 0;
-                        }
-                        String span = " ";
-                        String str =  span.repeat(20-longNum);
-                        File f = new File(getPath(value));
-                        if (f.isDirectory()) {
-                            System.out.print("\033[32m" + value + "\033[0m" + str);
-                        } else {
-                            System.out.print(value + str);
-                        }
-                    } else if (longNum < 40){
-                        i+=2;
-                        if (i > 5) {
-                            System.out.print("\n");
-                            i = 1;
-                        }
-                        String span = " ";
-                        String str =  span.repeat(40-longNum);
-                        File f = new File(getPath(value));
-                        if (f.isDirectory()) {
-                            System.out.print("\033[32m" + value + "\033[0m" + str);
-                        } else {
-                            System.out.print(value + str);
-                        }
+        try {
+            File f1 = new File(path);
+            if (f1.isDirectory()) {
+                String[] s = f1.list();
+                if (s!=null){
+                    int i = -1;
+                    StringBuilder longName = new StringBuilder();
+                    for (String value : s) {
+                        int longNum = value.length() + getChineseNumber(value);
+                        if (longNum < 20){
+                            i++;
+                            if (i > 5) {
+                                System.out.print("\n");
+                                i = 0;
+                            }
+                            String span = " ";
+                            String str =  span.repeat(20-longNum);
+                            File f = new File(getPath(value));
+                            if (f.isDirectory()) {
+                                System.out.print("\033[32m" + value + "\033[0m" + str);
+                            } else {
+                                System.out.print(value + str);
+                            }
+                        } else if (longNum < 40){
+                            i+=2;
+                            if (i > 5) {
+                                System.out.print("\n");
+                                i = 1;
+                            }
+                            String span = " ";
+                            String str =  span.repeat(40-longNum);
+                            File f = new File(getPath(value));
+                            if (f.isDirectory()) {
+                                System.out.print("\033[32m" + value + "\033[0m" + str);
+                            } else {
+                                System.out.print(value + str);
+                            }
 
-                    }else if (longNum < 60){
-                        i+=3;
-                        if (i > 5) {
-                            System.out.print("\n");
-                            i = 2;
-                        }
-                        String span = " ";
-                        String str =  span.repeat(60-longNum);
-                        File f = new File(getPath(value));
-                        if (f.isDirectory()) {
-                            System.out.print("\033[32m" + value + "\033[0m" + str);
-                        } else {
-                            System.out.print(value + str);
-                        }
+                        }else if (longNum < 60){
+                            i+=3;
+                            if (i > 5) {
+                                System.out.print("\n");
+                                i = 2;
+                            }
+                            String span = " ";
+                            String str =  span.repeat(60-longNum);
+                            File f = new File(getPath(value));
+                            if (f.isDirectory()) {
+                                System.out.print("\033[32m" + value + "\033[0m" + str);
+                            } else {
+                                System.out.print(value + str);
+                            }
 
-                    }else {
-                        File f = new File(getPath(value));
-                        if (f.isDirectory()) {
-                            longName.append("\033[32m").append(value).append("\033[0m").append("\n");
-                        } else {
-                            longName.append(value).append("\n");
+                        }else {
+                            File f = new File(getPath(value));
+                            if (f.isDirectory()) {
+                                longName.append("\033[32m").append(value).append("\033[0m").append("\n");
+                            } else {
+                                longName.append(value).append("\n");
+                            }
                         }
                     }
-                }
-                System.out.println();
-                if (!longName.toString().equals("")){
-                    System.out.print(longName);
+                    System.out.println();
+                    if (!longName.toString().equals("")){
+                        System.out.print(longName);
+                    }
+                } else {
+                    System.out.println();
                 }
             } else {
-                System.out.println();
+                System.out.println(path + " 不是一个目录");
             }
-        } else {
-            System.out.println(path + " 不是一个目录");
+        } catch (Exception e){
+            System.out.println("罗列文件（ls）指令失败");
+            System.out.println(e);
         }
     }
-    void intoFile() throws IOException{
-        Scanner s = new Scanner(System.in);
-        System.out.print("请输入文件名：");
-        String Filename = getPath(s.next());
-        File f1 = new File(Filename);
-        if (f1.exists()){
-            if (f1.isDirectory()){
-                path = f1.getCanonicalPath();
+    void intoFile() {
+        try {
+            Scanner s = new Scanner(System.in);
+            System.out.print("请输入文件名：");
+            String Filename = getPath(s.next());
+            File f1 = new File(Filename);
+            if (f1.exists()){
+                if (f1.isDirectory()){
+                    path = f1.getPath();
+                }else {
+                    System.out.println(Filename + "不是一个目录");
+                }
             }else {
-                System.out.println(Filename + "不是一个目录");
+                System.out.println("没有找到" + Filename);
             }
-        }else {
-            System.out.println("没有找到" + Filename);
+        } catch (Exception e){
+            System.out.println("进入文件夹（cd）指令失败");
+            System.out.println(e);
         }
     }
-    void copyFile() throws IOException {
-        Scanner s = new Scanner(System.in);
-        System.out.print("请输入原文件名：");
-        String oldPath = getPath(s.next());
-        System.out.print("请输入新文件名：");
-        String newPath = getPath(s.next());
-        File f = new File(newPath);
-        if (f.exists()){
-            System.out.println("已有文件名，是否覆盖？");
-            String a = s.next();
-            if (a.equals("y") | a.equals("Y")){
+    void copyFile() {
+        try {
+            Scanner s = new Scanner(System.in);
+            System.out.print("请输入原文件名：");
+            String oldPath = getPath(s.next());
+            System.out.print("请输入新文件名：");
+            String newPath = getPath(s.next());
+            File f = new File(newPath);
+            if (f.exists()){
+                System.out.println("已有文件名，是否覆盖？");
+                String a = s.next();
+                if (a.equals("y") | a.equals("Y")){
+                    copyFile(oldPath,newPath);
+                }else {
+                    System.out.println("已结束复制操作");
+                }
+            }else {
                 copyFile(oldPath,newPath);
-            }else {
-                System.out.println("已结束复制操作");
             }
-        }else {
-            copyFile(oldPath,newPath);
+        } catch (Exception e){
+            System.out.println("复制文件（cp）指令失败");
+            System.out.println(e);
         }
     }
     void copyFile(String oldPath, String newPath) throws IOException {
@@ -239,23 +264,28 @@ class RunStart {
             System.out.println("没有找到" + oldPath);
         }
     }
-    void copyAllFile() throws IOException {
-        Scanner s = new Scanner(System.in);
-        System.out.print("请输入原文件名：");
-        String oldPath = getPath(s.next());
-        System.out.print("请输入新文件名：");
-        String newPath = getPath(s.next());
-        File f = new File(newPath);
-        if (f.exists()){
-            System.out.println("已有文件名，是否覆盖？");
-            String a = s.next();
-            if (a.equals("y") | a.equals("Y")){
-                copyAllFile(oldPath,newPath);
+    void copyAllFile() {
+        try {
+            Scanner s = new Scanner(System.in);
+            System.out.print("请输入原文件名：");
+            String oldPath = getPath(s.next());
+            System.out.print("请输入新文件名：");
+            String newPath = getPath(s.next());
+            File f = new File(newPath);
+            if (f.exists()){
+                System.out.println("已有文件名，是否覆盖？");
+                String a = s.next();
+                if (a.equals("y") | a.equals("Y")){
+                    copyAllFile(oldPath,newPath);
+                }else {
+                    System.out.println("已结束复制操作");
+                }
             }else {
-                System.out.println("已结束复制操作");
+                copyAllFile(oldPath,newPath);
             }
-        }else {
-            copyAllFile(oldPath,newPath);
+        } catch (Exception e){
+            System.out.println("复制文件夹（cpa）指令失败");
+            System.out.println(e);
         }
     }
     void copyAllFile(String oldPath,String newPath) throws IOException {
@@ -309,22 +339,26 @@ class RunStart {
         }
         return count - count/5;
     }
-    void saleFile() throws IOException {
-        Scanner s = new Scanner(System.in);
-        System.out.print("请输入要加密的文件名：");
-        String fPath = s.next();
-        System.out.println("请注意，您正在使用加密功能，请确保您能记住密码以防文件无法恢复");
-        System.out.println("请注意，我们没有保存您的密码，而且您的每一步操作都是不可逆的。");
-        System.out.print("请输入密码（六位数字）：");
-        int key = getInt();
-        File file = new File(path + File.separator + fPath);
-        if(file.exists()){
-            String temp = saleFile(file.getPath(),key);
-            new File(path + File.separator + temp).delete();
-        } else {
-            System.out.println("没有找到加密文件");
+    void saleFile() {
+        try {
+            Scanner s = new Scanner(System.in);
+            System.out.print("请输入要加密的文件名：");
+            String fPath = s.next();
+            System.out.println("请注意，您正在使用加密功能，请确保您能记住密码以防文件无法恢复");
+            System.out.println("请注意，我们没有保存您的密码，而且您的每一步操作都是不可逆的。");
+            System.out.print("请输入密码（六位数字）：");
+            int key = getInt();
+            File file = new File(path + File.separator + fPath);
+            if(file.exists()){
+                String temp = saleFile(file.getPath(),key);
+                new File(path + File.separator + temp).delete();
+            } else {
+                System.out.println("没有找到加密文件");
+            }
+        } catch (Exception e){
+            System.out.println("加密文件（sl）指令失败");
+            System.out.println(e);
         }
-
     }
     String saleFile(String fPath,int key) throws IOException {
         File f=new File(fPath);
@@ -411,21 +445,26 @@ class RunStart {
         }
         return "temp";
     }
-    void resaleFile() throws IOException {
-        Scanner s = new Scanner(System.in);
-        System.out.print("请输入要解密的文件名：");
-        String fPath = s.next();
-        System.out.println("请注意，您正在使用解密功能，请确保您使用正确的密码以防文件无法恢复");
-        System.out.println("请注意，我们没有保存您的密码，而且您的每一步操作都是不可逆的。");
-        System.out.println("如果你真的忘记了密码，请记住所有你输入的密码，以便恢复到最初的加密状态");
-        System.out.print("请输入密码：");
-        int key = getInt();
-        File file = new File(path + File.separator + fPath);
-        if(file.exists()){
-            String temp = resaleFile(file.getPath(),key);
-            new File(path + File.separator + temp).delete();
-        } else {
-            System.out.println("没有找到解密文件");
+    void resaleFile() {
+        try {
+            Scanner s = new Scanner(System.in);
+            System.out.print("请输入要解密的文件名：");
+            String fPath = s.next();
+            System.out.println("请注意，您正在使用解密功能，请确保您使用正确的密码以防文件无法恢复");
+            System.out.println("请注意，我们没有保存您的密码，而且您的每一步操作都是不可逆的。");
+            System.out.println("如果你真的忘记了密码，请记住所有你输入的密码，以便恢复到最初的加密状态");
+            System.out.print("请输入密码：");
+            int key = getInt();
+            File file = new File(path + File.separator + fPath);
+            if(file.exists()){
+                String temp = resaleFile(file.getPath(),key);
+                new File(path + File.separator + temp).delete();
+            } else {
+                System.out.println("没有找到解密文件");
+            }
+        } catch (Exception e){
+            System.out.println("解密文件（rsl）指令失败");
+            System.out.println(e);
         }
     }
     String resaleFile(String fPath,int key) throws IOException {
