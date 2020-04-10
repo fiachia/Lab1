@@ -13,7 +13,7 @@ public class Run {
 class RunStart {
     private String path = "C:" + File.separator + "Users" + File.separator + System.getenv().get("USERNAME");
     private Pattern pan0 = Pattern.compile("[a-zA-Z]:\\\\?");
-    void getHelp() {
+    private void getHelp() {
         System.out.println("mkdir：创建文件");
         System.out.println("rm：删除文件/文件夹");
         System.out.println("cd：进入文件");
@@ -24,7 +24,7 @@ class RunStart {
         System.out.println("rsl：解密文件");
         System.out.println("quit：退出");
     }
-    void runStart() throws Exception{
+    public void runStart() {
         System.out.println("----欢迎使用命令行文件管理系统----");
         Scanner s=new Scanner(System.in);
         String a;
@@ -71,7 +71,7 @@ class RunStart {
             }
         }while(!a.equals("quit"));
     }
-    void createFile() {//创建文件夹
+    private void createFile() {//创建文件夹
         try {
             Scanner s = new Scanner(System.in);
             System.out.print("请输入文件名：");
@@ -89,13 +89,13 @@ class RunStart {
             System.out.println(e);
         }
     }
-    void removeFile(){
+    private void removeFile(){
         Scanner s = new Scanner(System.in);
         System.out.print("请输入文件名：");
         String Filename = getPath(s.next());
         removeFile(Filename);
     }
-    void removeFile(String fPath){
+    private void removeFile(String fPath){
         try {
             File f = new File(fPath);
             if (f.exists()){
@@ -120,7 +120,7 @@ class RunStart {
             System.out.println(e);
         }
     }
-    void listFile() {
+    private void listFile() {
         try {
             File f1 = new File(path);
             if (f1.isDirectory()) {
@@ -198,7 +198,7 @@ class RunStart {
             System.out.println(e);
         }
     }
-    void intoFile() {
+    private void intoFile() {
         try {
             Scanner s = new Scanner(System.in);
             System.out.print("请输入文件名：");
@@ -218,7 +218,7 @@ class RunStart {
             System.out.println(e);
         }
     }
-    void copyFile() {
+    private void copyFile() {
         try {
             Scanner s = new Scanner(System.in);
             System.out.print("请输入原文件名：");
@@ -242,7 +242,7 @@ class RunStart {
             System.out.println(e);
         }
     }
-    void copyFile(String oldPath, String newPath) throws IOException {
+    private void copyFile(String oldPath, String newPath) throws IOException {
         File in = new File(oldPath);
         if (in.exists()){
             if (in.isFile()){
@@ -264,7 +264,7 @@ class RunStart {
             System.out.println("没有找到" + oldPath);
         }
     }
-    void copyAllFile() {
+    private void copyAllFile() {
         try {
             Scanner s = new Scanner(System.in);
             System.out.print("请输入原文件名：");
@@ -288,7 +288,7 @@ class RunStart {
             System.out.println(e);
         }
     }
-    void copyAllFile(String oldPath,String newPath) throws IOException {
+    private void copyAllFile(String oldPath,String newPath) throws IOException {
         File f=new File(oldPath);
         if (f.exists()){
             if (f.isDirectory()){
@@ -330,7 +330,7 @@ class RunStart {
             System.out.println("没有找到" + oldPath);
         }
     }
-    int getChineseNumber(String str) {
+    private int getChineseNumber(String str) {
         Pattern p = Pattern.compile("[\u4E00-\u9FA5|！，。（）《》“”？：；【】]");
         Matcher m = p.matcher(str);
         int count = 0;
@@ -339,7 +339,7 @@ class RunStart {
         }
         return count - count/5;
     }
-    void saleFile() {
+    private void saleFile() {
         try {
             Scanner s = new Scanner(System.in);
             System.out.print("请输入要加密的文件名：");
@@ -360,7 +360,7 @@ class RunStart {
             System.out.println(e);
         }
     }
-    String saleFile(String fPath,int key) throws IOException {
+    private String saleFile(String fPath,int key) throws IOException {
         File f=new File(fPath);
         String tempPath = path + File.separator + "temp";
         File f0=new File(tempPath);
@@ -445,7 +445,7 @@ class RunStart {
         }
         return "temp";
     }
-    void resaleFile() {
+    private void resaleFile() {
         try {
             Scanner s = new Scanner(System.in);
             System.out.print("请输入要解密的文件名：");
@@ -467,7 +467,7 @@ class RunStart {
             System.out.println(e);
         }
     }
-    String resaleFile(String fPath,int key) throws IOException {
+    private String resaleFile(String fPath,int key) throws IOException {
         File f=new File(fPath);
         String tempPath = path + File.separator + "temp";
         File f0=new File(tempPath);
@@ -551,7 +551,7 @@ class RunStart {
         }
         return "temp";
     }
-    int getInt(){
+    private int getInt(){
         Scanner s = new Scanner(System.in);
         int key;
         if (s.hasNextInt()){
@@ -568,7 +568,7 @@ class RunStart {
             return getInt();
         }
     }
-    String getPath(String filePath){
+    private String getPath(String filePath){
         if (!pan0.matcher(filePath).lookingAt()){
             filePath = path + File.separator + filePath;
         }
